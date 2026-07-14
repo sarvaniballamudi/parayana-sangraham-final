@@ -1,0 +1,18 @@
+body {
+  margin: 0;
+  background: #f9fafb;
+  color: #111827;
+}
+
+button,
+input {
+  font-family: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+audio {
+  margin-top: 12px;
+}
