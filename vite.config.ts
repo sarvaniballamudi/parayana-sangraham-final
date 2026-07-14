@@ -11,12 +11,12 @@ export default defineConfig({
       registerType: "autoUpdate",
 
       manifest: {
-        name: "Audio Library",
-        short_name: "Audio",
+        name: "Parayana Sangraham",
+        short_name: "Parayana",
         description: "Personal offline audio library",
 
-        start_url: "/",
-        scope: "./",
+        start_url: "/parayana-sangraham-final/",
+        scope: "/parayana-sangraham-final/",
         display: "standalone",
 
         background_color: "#111827",
@@ -24,12 +24,12 @@ export default defineConfig({
 
         icons: [
           {
-            src: "icons/icon-192.png",
+            src: "/parayana-sangraham-final/icons/icon-192.png",
             sizes: "192x192",
             type: "image/png",
           },
           {
-            src: "icons/icon-512.png",
+            src: "/parayana-sangraham-final/icons/icon-512.png",
             sizes: "512x512",
             type: "image/png",
           },
