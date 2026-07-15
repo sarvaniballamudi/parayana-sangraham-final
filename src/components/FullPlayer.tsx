@@ -1,3 +1,4 @@
+import { ChevronLeft, Pause, Play, SkipBack, SkipForward } from "lucide-react";
 import type { AudioFile } from "../types";
 
 interface FullPlayerProps {
@@ -38,13 +39,20 @@ export default function FullPlayer({
   onClose,
   onChangeSpeed,
 }: FullPlayerProps) {
+  const speeds = [1, 1.25, 1.5, 2];
+
+  const handleSpeedChange = () => {
+    const currentIndex = speeds.indexOf(playbackRate);
+    const nextSpeed = speeds[(currentIndex + 1) % speeds.length];
+    onChangeSpeed(nextSpeed);
+  };
+
   return (
     <div
       style={{
         position: "fixed",
         inset: 0,
-        background: "#111827",
-        color: "white",
+        background: "#fff0a5",
         zIndex: 2000,
         padding: 24,
         display: "flex",
@@ -53,27 +61,78 @@ export default function FullPlayer({
         alignItems: "center",
       }}
     >
-      <button
-        onClick={onClose}
-        style={{
-          position: "absolute",
-          top: 20,
-          left: 20,
-        }}
-      >
-        ↓
-      </button>
+      <div onClick={onClose} role="button" style={{ cursor: "pointer" }}>
+        <ChevronLeft
+          size={32}
+          color="#8e2800"
+          strokeWidth={2}
+          style={{
+            position: "absolute",
+            top: 20,
+            left: 20,
+          }}
+        />
+      </div>
 
-      <h2
+      <div
         style={{
-          textAlign: "center",
-          maxWidth: 350,
-          overflow: "hidden",
-          textOverflow: "ellipsis",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
-        🎵 {currentFile.name}
-      </h2>
+        <img
+          src={`${import.meta.env.BASE_URL}icons/icon-192.png`}
+          alt="Parayana Sangraham Logo"
+        />
+      </div>
+
+      <img
+        src={`${import.meta.env.BASE_URL}images/logo square.png`}
+        alt="Default"
+        height={350}
+        width={350}
+        style={{
+          width: "350px",
+          height: "350px",
+          objectFit: "cover",
+        }}
+      />
+
+      <p
+        style={{
+          color: "#333",
+          fontWeight: "semibold",
+          fontSize: "16px",
+          paddingTop: "4px",
+          paddingBottom: "16px",
+        }}
+      >
+        {currentFile.name}
+      </p>
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          width: "100%",
+          maxWidth: 500,
+          marginBottom: 30,
+        }}
+      >
+        <div
+          role="button"
+          onClick={handleSpeedChange}
+          style={{ cursor: "pointer" }}
+        >
+          {playbackRate}x
+        </div>
+
+        <div>
+          {formatTime(currentTime)} / {formatTime(duration)}
+        </div>
+      </div>
 
       <input
         type="range"
@@ -81,51 +140,57 @@ export default function FullPlayer({
         max={duration || 0}
         value={currentTime}
         onChange={(e) => onSeek(Number(e.target.value))}
-        style={{
-          width: "100%",
-          maxWidth: 500,
-        }}
+        className="audio-slider"
       />
-
-      <div style={{ marginTop: 20 }}>
-        Speed:
-        {[1, 1.25, 1.5, 2].map((speed) => (
-          <button
-            key={speed}
-            onClick={() => onChangeSpeed(speed)}
-            style={{
-              marginLeft: 8,
-              fontWeight: playbackRate === speed ? "bold" : "normal",
-            }}
-          >
-            {speed}x
-          </button>
-        ))}
-      </div>
-
-      <div>
-        {formatTime(currentTime)} / {formatTime(duration)}
-      </div>
 
       <div
         style={{
           marginTop: 30,
           display: "flex",
           gap: 25,
+          alignItems: "center",
         }}
       >
-        <button onClick={onPrevious}>⏮</button>
+        <SkipBack
+          size={32}
+          strokeWidth={2}
+          role="button"
+          onClick={onPrevious}
+          style={{ cursor: "pointer" }}
+          fill="#8e2800"
+          color="#8e2800"
+        />
 
-        <button
-          onClick={onToggle}
+        <div
           style={{
-            fontSize: 24,
+            borderRadius: "50%",
+            backgroundColor: "#8e2800",
+            width: "75px",
+            height: "75px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            cursor: "pointer",
           }}
+          role="button"
+          onClick={onToggle}
         >
-          {isPlaying ? "⏸" : "▶"}
-        </button>
+          {isPlaying ? (
+            <Pause size={32} color="#fffced" strokeWidth={2} />
+          ) : (
+            <Play size={32} color="#fffced" strokeWidth={2} />
+          )}
+        </div>
 
-        <button onClick={onNext}>⏭</button>
+        <SkipForward
+          size={32}
+          color="#8e2800"
+          strokeWidth={2}
+          onClick={onNext}
+          role="button"
+          style={{ cursor: "pointer" }}
+          fill="#8e2800"
+        />
       </div>
     </div>
   );

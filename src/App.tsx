@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import Card from "./components/Card";
 import FullPlayer from "./components/FullPlayer";
 import MiniPlayer from "./components/MiniPlayer";
 import { loadFiles, saveFiles } from "./db";
@@ -68,34 +69,20 @@ export default function App() {
         margin: "auto",
       }}
     >
-      <h1>🎧 My Audio Library</h1>
-
-      <label>
-        <input
-          type="file"
-          accept="audio/*"
-          multiple
-          onChange={addFiles}
-          style={{ display: "none" }}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <img
+          src={`${import.meta.env.BASE_URL}icons/icon-192.png`}
+          alt="Parayana Sangraham Logo"
         />
+      </div>
 
-        <span
-          style={{
-            display: "inline-block",
-            padding: 12,
-            background: "#2563eb",
-            color: "white",
-            borderRadius: 8,
-          }}
-        >
-          + Add Audio Files
-        </span>
-      </label>
-
-      <br />
-      <br />
-
-      {currentFile && (
+      {/* {currentFile && (
         <div>
           <strong>{currentFile.name}</strong>
 
@@ -107,43 +94,77 @@ export default function App() {
 
           <button onClick={next}>⏭</button>
         </div>
-      )}
+      )} */}
 
-      <br />
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-around",
+        }}
+      >
+        {files.length > 0 && (
+          <input
+            placeholder="Search here..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            style={{
+              width: "80%",
+              padding: 10,
+              backgroundColor: "#fffced",
+              borderRadius: 10,
+              borderColor: "none",
+              boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+            }}
+          />
+        )}
 
-      {files.length > 0 && (
-        <input
-          placeholder="Search recordings..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          style={{
-            width: "100%",
-            padding: 10,
-          }}
-        />
-      )}
+        <label>
+          <input
+            type="file"
+            accept="audio/*"
+            multiple
+            onChange={addFiles}
+            style={{ display: "none" }}
+          />
 
-      <ul
+          <span
+            style={{
+              width: "20%",
+              padding: 10,
+              backgroundColor: "#8e2800",
+              borderRadius: 10,
+              borderColor: "none",
+              boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+              color: "#fff",
+              fontWeight: "semibold",
+            }}
+          >
+            + Add
+          </span>
+        </label>
+      </div>
+
+      <h2 style={{ color: "#8E2800", paddingTop: 8, paddingBottom: 8 }}>
+        Library
+      </h2>
+
+      <div
         style={{
           padding: 0,
-          listStyle: "none",
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))",
+          gap: 8,
         }}
       >
         {filteredFiles.map((file) => (
-          <li key={file.name}>
-            <button
-              onClick={() => playFile(file)}
-              style={{
-                width: "100%",
-                padding: 12,
-                marginTop: 8,
-              }}
-            >
-              ▶ {file.name}
-            </button>
-          </li>
+          <Card
+            name={file.name}
+            onClick={() => playFile(file)}
+            key={file.name}
+          />
         ))}
-      </ul>
+      </div>
 
       <MiniPlayer
         currentFile={currentFile}
@@ -151,9 +172,6 @@ export default function App() {
         currentTime={currentTime}
         duration={duration}
         onToggle={toggle}
-        onNext={next}
-        onPrevious={previous}
-        onSeek={seek}
         onExpand={() => setShowFullPlayer(true)}
       />
 
